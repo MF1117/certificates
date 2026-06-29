@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credential Wall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --wall:        #2B3A3A;
+    --wall-dark:   #233030;
+    --brass:       #B08D57;
+    --brass-light: #D8BD8A;
+    --parchment:   #F2EAD8;
+    --ink:         #2A2A28;
+    --ink-soft:    #5C5650;
+    --seal:        #8B3A3A;
+    --shadow:      rgba(0,0,0,0.45);
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        var(--wall) 0px, var(--wall) 78px,
+        var(--wall-dark) 78px, var(--wall-dark) 80px
+      );
+    font-family:'Inter', sans-serif;
+    color: var(--parchment);
+  }
+
+  /* ---------- Header / plaque ---------- */
+  header{
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 64px 24px 32px;
+    text-align:center;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--brass-light);
+    margin: 0 0 14px;
+  }
+  h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: clamp(34px, 6vw, 56px);
+    margin: 0 0 12px;
+    color: var(--parchment);
+  }
+  header p.sub{
+    font-size: 15px;
+    color: #B9C2C2;
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  header .hint{
+    margin-top: 18px;
+    font-size: 12px;
+    color: #8B9696;
+    font-family:'JetBrains Mono', monospace;
+  }
+
+  /* ---------- Gallery grid ---------- */
+  .gallery{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 24px 32px 100px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 56px 40px;
+  }
+
+  .frame{
+    --tilt: 0deg;
+    position: relative;
+    cursor: pointer;
+    background: linear-gradient(160deg, var(--brass-light), var(--brass) 55%, #8E6E3E);
+    padding: 10px;
+    border-radius: 3px;
+    transform: rotate(var(--tilt));
+    box-shadow:
+      0 18px 30px -10px var(--shadow),
+      0 2px 4px rgba(0,0,0,0.3);
+    transition: transform 0.45s cubic-bezier(.2,.8,.2,1), box-shadow 0.45s ease;
+    opacity: 0;
+    animation: hang 0.7s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .frame::before{
+    /* hanging nail + thread */
+    content:'';
+    position:absolute;
+    top:-22px;
+    left:50%;
+    width:1px;
+    height:22px;
+    background: rgba(0,0,0,0.35);
+    transform: translateX(-50%) rotate(calc(var(--tilt) * -1));
+    transform-origin: bottom center;
+  }
+  .frame:nth-child(odd){ --tilt: -1.6deg; }
+  .frame:nth-child(3n){ --tilt: 1.4deg; }
+  .frame:nth-child(5n){ --tilt: -0.6deg; }
+
+  .frame:hover, .frame:focus-visible{
+    transform: rotate(0deg) translateY(-6px) scale(1.02);
+    box-shadow:
+      0 30px 40px -12px var(--shadow),
+      0 4px 6px rgba(0,0,0,0.35);
+  }
+  .frame:focus-visible{ outline: 2px solid var(--brass-light); outline-offset: 4px; }
+
+  .frame-inner{
+    background: var(--ink);
+    padding: 6px;
+    border-radius: 2px;
+  }
+  .frame img{
+    display:block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 1px;
+    background: var(--parchment);
+  }
+
+  .plaque{
+    margin-top: 10px;
+    text-align:center;
+    padding: 6px 4px 2px;
+  }
+  .plaque .title{
+    font-family:'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-style: italic;
+    font-size: 17px;
+    color: #1E1B16;
+    line-height: 1.25;
+  }
+  .plaque .meta{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: #5A4626;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  @keyframes hang{
+    from{ opacity:0; transform: translateY(-18px) rotate(var(--tilt)); }
+    to{ opacity:1; transform: translateY(0) rotate(var(--tilt)); }
+  }
+  .frame:nth-child(1){ animation-delay: 0.05s; }
+  .frame:nth-child(2){ animation-delay: 0.12s; }
+  .frame:nth-child(3){ animation-delay: 0.19s; }
+  .frame:nth-child(4){ animation-delay: 0.26s; }
+  .frame:nth-child(5){ animation-delay: 0.33s; }
+  .frame:nth-child(6){ animation-delay: 0.40s; }
+
+  /* ---------- Modal (cert taken off the wall) ---------- */
+  .modal-backdrop{
+    position: fixed;
+    inset: 0;
+    background: rgba(10,14,14,0.7);
+    backdrop-filter: blur(3px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events:none;
+    transition: opacity 0.3s ease;
+    z-index: 50;
+  }
+  .modal-backdrop.open{ opacity:1; pointer-events:auto; }
+
+  .modal{
+    background: linear-gradient(160deg, var(--brass-light), var(--brass) 55%, #8E6E3E);
+    padding: 14px;
+    border-radius: 4px;
+    max-width: 720px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    transform: scale(0.85) rotate(-2deg);
+    transition: transform 0.4s cubic-bezier(.2,.8,.2,1);
+    box-shadow: 0 40px 70px -20px rgba(0,0,0,0.6);
+  }
+  .modal-backdrop.open .modal{ transform: scale(1) rotate(0deg); }
+
+  .modal-inner{
+    background: var(--ink);
+    padding: 8px;
+    border-radius: 3px;
+  }
+  .modal img{
+    display:block;
+    width:100%;
+    border-radius: 2px;
+    background: var(--parchment);
+  }
+
+  .modal-plaque{
+    background: var(--parchment);
+    margin-top: 10px;
+    border-radius: 3px;
+    padding: 22px 26px 24px;
+    position: relative;
+  }
+  .modal-plaque .seal{
+    position:absolute;
+    top:-16px; right: 22px;
+    width: 34px; height: 34px;
+    border-radius:50%;
+    background: var(--seal);
+    border: 2px solid var(--brass-light);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.35);
+  }
+  .modal-plaque .title{
+    font-family:'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 26px;
+    color: var(--ink);
+    margin: 0 0 4px;
+    padding-right: 50px;
+  }
+  .modal-plaque .meta{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 14px;
+  }
+  .modal-plaque .blurb{
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .close-btn{
+    position:absolute;
+    top: -14px; left: -14px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--ink);
+    color: var(--parchment);
+    font-size: 16px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    transition: background 0.2s ease;
+  }
+  .close-btn:hover{ background: var(--seal); }
+
+  footer{
+    text-align:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #6E7A7A;
+    padding: 0 24px 48px;
+  }
+  footer a{ color: var(--brass-light); text-decoration:none; }
+
+  @media (prefers-reduced-motion: reduce){
+    .frame, .modal, .modal-backdrop{ transition:none; animation:none; opacity:1; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Credential Wall</p>
+  <h1>My Certificates</h1>
+  <p class="sub">A small gallery of things I've finished, studied, or earned. Click any frame to take a closer look.</p>
+  <p class="hint">— placeholder certificates below, edit the DATA array in index.html to use your own —</p>
+</header>
+
+<main class="gallery" id="gallery"></main>
+
+<div class="modal-backdrop" id="backdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="close-btn" id="closeBtn" aria-label="Close">✕</button>
+    <div class="modal-inner">
+      <img id="modalImg" src="" alt="">
+    </div>
+    <div class="modal-plaque">
+      <div class="seal"></div>
+      <h2 class="title" id="modal-title"></h2>
+      <p class="meta" id="modalMeta"></p>
+      <p class="blurb" id="modalBlurb"></p>
+    </div>
+  </div>
+</div>
+
+<footer>Built with a hammer, a nail, and some HTML — hosted on GitHub Pages</footer>
+
+<script>
+/* ----------------------------------------------------------------
+   EDIT ME: replace these placeholder entries with your own certs.
+   - image: a path/URL to your certificate image
+     (e.g. "certs/aws-cloud-practitioner.png" if you add the file
+     to your repo, or any image URL)
+   - title / issuer / date / blurb: your own text
+   ---------------------------------------------------------------- */
+const DATA = [
+  {
+    title: "Responsive Web Design",
+    issuer: "freeCodeCamp",
+    date: "2024",
+    blurb: "Built a handful of real layouts with flexbox and grid until they stopped feeling like guesswork. This one's a placeholder — swap in your actual certificate image and a sentence or two about what you took away from it.",
+    accent: "#B08D57"
+  },
+  {
+    title: "AWS Certified Cloud Practitioner",
+    issuer: "Amazon Web Services",
+    date: "2024",
+    blurb: "Covered the basics of cloud architecture, billing, and security — enough to talk shop with a cloud engineer without nodding blankly. Replace this blurb with what the certificate actually meant to you.",
+    accent: "#8B3A3A"
+  },
+  {
+    title: "Google Data Analytics",
+    issuer: "Google / Coursera",
+    date: "2023",
+    blurb: "A few months learning to clean, analyze, and visualize data the way a working analyst would. Swap this card's image for the real PDF/PNG of your certificate when you have it.",
+    accent: "#3D5A5A"
+  },
+  {
+    title: "Intro to Machine Learning",
+    issuer: "Kaggle Learn",
+    date: "2023",
+    blurb: "Short course, but it's where decision trees and model validation finally clicked. Placeholder text — write a line about the hardest part of this one.",
+    accent: "#6B5B3E"
+  },
+  {
+    title: "Git & GitHub Essentials",
+    issuer: "self-study",
+    date: "2022",
+    blurb: "Not an official certificate, but worth a frame: the point where branches, merges, and rebases stopped being scary. Use this slot for anything you're proud of, certified or not.",
+    accent: "#5A4A6B"
+  },
+  {
+    title: "Add Your Next One Here",
+    issuer: "—",
+    date: "—",
+    blurb: "This frame is empty on purpose. Duplicate one of the objects above in the DATA array, fill in your details, and a new frame will appear on the wall automatically.",
+    accent: "#888"
+  }
+];
+
+/* Generates a simple placeholder "certificate" SVG so the page
+   works out of the box. Delete this function and use real image
+   paths/URLs in DATA above once you have your own scans. */
+function placeholderSVG(title, issuer, accent){
+  const safe = (s) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  return `data:image/svg+xml;utf8,` + encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" width="600" height="450">
+      <rect width="600" height="450" fill="#F2EAD8"/>
+      <rect x="18" y="18" width="564" height="414" fill="none" stroke="${accent}" stroke-width="3"/>
+      <rect x="30" y="30" width="540" height="390" fill="none" stroke="${accent}" stroke-width="1"/>
+      <circle cx="300" cy="150" r="34" fill="none" stroke="${accent}" stroke-width="2"/>
+      <text x="300" y="158" font-family="Georgia, serif" font-size="26" fill="${accent}" text-anchor="middle">★</text>
+      <text x="300" y="230" font-family="Georgia, serif" font-size="22" fill="#2A2A28" text-anchor="middle">${safe(title)}</text>
+      <text x="300" y="262" font-family="Georgia, serif" font-size="13" fill="#5C5650" text-anchor="middle" letter-spacing="1">${safe(issuer.toUpperCase())}</text>
+      <line x1="220" y1="300" x2="380" y2="300" stroke="${accent}" stroke-width="1"/>
+      <text x="300" y="320" font-family="Georgia, serif" font-size="11" fill="#5C5650" text-anchor="middle">CERTIFICATE OF COMPLETION</text>
+    </svg>
+  `);
+}
+
+const gallery = document.getElementById('gallery');
+const backdrop = document.getElementById('backdrop');
+const modalImg = document.getElementById('modalImg');
+const modalTitle = document.getElementById('modal-title');
+const modalMeta = document.getElementById('modalMeta');
+const modalBlurb = document.getElementById('modalBlurb');
+const closeBtn = document.getElementById('closeBtn');
+
+let lastFocused = null;
+
+DATA.forEach((cert, i) => {
+  const imgSrc = cert.image || placeholderSVG(cert.title, cert.issuer, cert.accent || "#B08D57");
+
+  const frame = document.createElement('div');
+  frame.className = 'frame';
+  frame.tabIndex = 0;
+  frame.setAttribute('role', 'button');
+  frame.setAttribute('aria-label', `View certificate: ${cert.title}, ${cert.issuer}`);
+  frame.innerHTML = `
+    <div class="frame-inner">
+      <img src="${imgSrc}" alt="${cert.title} certificate thumbnail" loading="lazy">
+    </div>
+    <div class="plaque">
+      <div class="title">${cert.title}</div>
+      <div class="meta">${cert.issuer} · ${cert.date}</div>
+    </div>
+  `;
+
+  function openModal(){
+    lastFocused = document.activeElement;
+    modalImg.src = imgSrc;
+    modalImg.alt = `${cert.title} certificate`;
+    modalTitle.textContent = cert.title;
+    modalMeta.textContent = `${cert.issuer} · ${cert.date}`;
+    modalBlurb.textContent = cert.blurb;
+    backdrop.classList.add('open');
+    closeBtn.focus();
+  }
+
+  frame.addEventListener('click', openModal);
+  frame.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openModal(); }
+  });
+
+  gallery.appendChild(frame);
+});
+
+function closeModal(){
+  backdrop.classList.remove('open');
+  if(lastFocused) lastFocused.focus();
+}
+
+closeBtn.addEventListener('click', closeModal);
+backdrop.addEventListener('click', (e) => {
+  if(e.target === backdrop) closeModal();
+});
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape' && backdrop.classList.contains('open')) closeModal();
+});
+</script>
+
+</body>
+</html>

@@ -37,7 +37,6 @@
     color: var(--parchment);
   }
 
-  /* ---------- Header / plaque ---------- */
   header{
     max-width: 920px;
     margin: 0 auto;
@@ -66,14 +65,7 @@
     margin: 0 auto;
     line-height: 1.6;
   }
-  header .hint{
-    margin-top: 18px;
-    font-size: 12px;
-    color: #8B9696;
-    font-family:'JetBrains Mono', monospace;
-  }
 
-  /* ---------- Gallery grid ---------- */
   .gallery{
     max-width: 1180px;
     margin: 0 auto;
@@ -99,7 +91,6 @@
     animation: hang 0.7s cubic-bezier(.2,.8,.2,1) forwards;
   }
   .frame::before{
-    /* hanging nail + thread */
     content:'';
     position:absolute;
     top:-22px;
@@ -135,9 +126,8 @@
     border-radius: 1px;
     background: var(--parchment);
   }
-  .frame canvas{
-    height: auto;
-  }
+  .frame canvas{ height: auto; }
+
   .pdf-loading{
     display: flex;
     align-items: center;
@@ -184,7 +174,34 @@
   .frame:nth-child(5){ animation-delay: 0.33s; }
   .frame:nth-child(6){ animation-delay: 0.40s; }
 
-  /* ---------- Modal (cert taken off the wall) ---------- */
+  /* ---------- Download button on card ---------- */
+  .dl-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 8px 4px 4px;
+    padding: 7px 10px;
+    background: var(--ink);
+    color: var(--brass-light);
+    border: 1px solid var(--brass);
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .dl-btn:hover{ background: var(--brass); color: var(--ink); }
+  .dl-btn.disabled{
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* ---------- Modal ---------- */
   .modal-backdrop{
     position: fixed;
     inset: 0;
@@ -212,6 +229,7 @@
     transform: scale(0.85) rotate(-2deg);
     transition: transform 0.4s cubic-bezier(.2,.8,.2,1);
     box-shadow: 0 40px 70px -20px rgba(0,0,0,0.6);
+    position: relative;
   }
   .modal-backdrop.open .modal{ transform: scale(1) rotate(0deg); }
 
@@ -220,7 +238,7 @@
     padding: 8px;
     border-radius: 3px;
   }
-  .modal img{
+  .modal-inner canvas, .modal-inner img{
     display:block;
     width:100%;
     border-radius: 2px;
@@ -265,6 +283,25 @@
     color: var(--ink);
     margin: 0;
   }
+  .modal-dl-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 10px 20px;
+    background: var(--ink);
+    color: var(--brass-light);
+    border: 1.5px solid var(--brass);
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .modal-dl-btn:hover{ background: var(--brass); color: var(--ink); }
+  .modal-dl-btn.hidden{ display: none; }
 
   .close-btn{
     position:absolute;
@@ -291,64 +328,6 @@
     color: #6E7A7A;
     padding: 0 24px 48px;
   }
-  footer a{ color: var(--brass-light); text-decoration:none; }
-
-  /* ---------- Download button on card ---------- */
-  .dl-btn{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    margin: 8px 4px 4px;
-    padding: 7px 10px;
-    background: var(--ink);
-    color: var(--brass-light);
-    border: 1px solid var(--brass);
-    border-radius: 3px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
-  }
-  .dl-btn:hover{
-    background: var(--brass);
-    color: var(--ink);
-  }
-  .dl-btn svg{
-    flex-shrink: 0;
-  }
-  .dl-btn.disabled{
-    opacity: 0.35;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-
-  /* ---------- Download button inside modal ---------- */
-  .modal-dl-btn{
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 18px;
-    padding: 10px 20px;
-    background: var(--ink);
-    color: var(--brass-light);
-    border: 1.5px solid var(--brass);
-    border-radius: 3px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: background 0.2s ease, color 0.2s ease;
-  }
-  .modal-dl-btn:hover{
-    background: var(--brass);
-    color: var(--ink);
-  }
-  .modal-dl-btn.hidden{ display: none; }
 
   @media (prefers-reduced-motion: reduce){
     .frame, .modal, .modal-backdrop{ transition:none; animation:none; opacity:1; }
@@ -360,8 +339,7 @@
 <header>
   <p class="eyebrow">Credential Wall</p>
   <h1>My Certificates</h1>
-  <p class="sub">A small gallery of things I've finished, studied, or earned. Click any frame to take a closer look.</p>
-  <p class="hint">— placeholder certificates below, edit the DATA array in index.html to use your own —</p>
+  <p class="sub">A collection of things I've studied, finished, and earned. Click any frame to take a closer look.</p>
 </header>
 
 <main class="gallery" id="gallery"></main>
@@ -370,8 +348,8 @@
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <button class="close-btn" id="closeBtn" aria-label="Close">✕</button>
     <div class="modal-inner">
-      <canvas id="modalCanvas" style="display:none;width:100%;border-radius:2px;background:var(--parchment);"></canvas>
-      <img id="modalImg" src="" alt="" style="display:none;width:100%;border-radius:2px;background:var(--parchment);">
+      <canvas id="modalCanvas" style="display:none;"></canvas>
+      <img id="modalImg" src="" alt="" style="display:none;">
     </div>
     <div class="modal-plaque">
       <div class="seal"></div>
@@ -379,112 +357,87 @@
       <p class="meta" id="modalMeta"></p>
       <p class="blurb" id="modalBlurb"></p>
       <a id="modalDlBtn" class="modal-dl-btn hidden" href="#" download>
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Download PDF
       </a>
     </div>
   </div>
 </div>
 
-<footer>Built with a hammer, a nail, and some HTML — hosted on GitHub Pages</footer>
+<footer>Hosted on GitHub Pages</footer>
 
 <script>
-/* ----------------------------------------------------------------
-   EDIT ME: replace these placeholder entries with your own certs.
-   - image: a path/URL to your certificate image
-     (e.g. "certs/aws-cloud-practitioner.png" if you add the file
-     to your repo, or any image URL)
-   - title / issuer / date / blurb: your own text
-   ---------------------------------------------------------------- */
+/* ================================================================
+   EDIT THIS DATA ARRAY to add your own certificates.
+
+   For each certificate:
+   - title:  name of the certificate
+   - issuer: who gave it to you
+   - date:   year you earned it
+   - blurb:  a sentence or two about it
+   - accent: a hex colour for the frame tint
+   - pdf:    path to your PDF in the certs/ folder
+             e.g. "certs/myfile.pdf"
+             REMOVE this line if you haven't uploaded a PDF yet.
+
+   To add more certificates, copy one block and paste it
+   after the last one (before the closing ] ).
+   ================================================================ */
 const DATA = [
   {
-    title: "Responsive Web Design",
-    issuer: "freeCodeCamp",
+    title: "Cloud Computing Certificate",
+    issuer: "Your Issuer Here",
     date: "2024",
-    blurb: "Built a handful of real layouts with flexbox and grid until they stopped feeling like guesswork. This one's a placeholder — swap in your actual certificate image and a sentence or two about what you took away from it.",
+    blurb: "Replace this with a sentence or two about what this certificate covers and what you learned from it.",
     accent: "#B08D57",
     pdf: "certs/cloud1.pdf"
   },
   {
-    title: "AWS Certified Cloud Practitioner",
-    issuer: "Amazon Web Services",
+    title: "Add Your Next Certificate",
+    issuer: "Issuer Name",
     date: "2024",
-    blurb: "Covered the basics of cloud architecture, billing, and security — enough to talk shop with a cloud engineer without nodding blankly. Replace this blurb with what the certificate actually meant to you.",
-    accent: "#8B3A3A",
-    pdf: "certs/aws-cloud-practitioner.pdf"
+    blurb: "Upload the PDF to your certs/ folder, update the title, issuer, date, and blurb, then add: pdf: \"certs/yourfile.pdf\"",
+    accent: "#8B3A3A"
+    // no pdf: line yet — upload the PDF first, then add it
   },
   {
-    title: "Google Data Analytics",
-    issuer: "Google / Coursera",
-    date: "2023",
-    blurb: "A few months learning to clean, analyze, and visualize data the way a working analyst would. Swap this card's image for the real PDF/PNG of your certificate when you have it.",
-    accent: "#3D5A5A",
-    pdf: "certs/google-data-analytics.pdf"
+    title: "Add Your Next Certificate",
+    issuer: "Issuer Name",
+    date: "2024",
+    blurb: "Upload the PDF to your certs/ folder, update the title, issuer, date, and blurb, then add: pdf: \"certs/yourfile.pdf\"",
+    accent: "#3D5A5A"
   },
   {
-    title: "Intro to Machine Learning",
-    issuer: "Kaggle Learn",
-    date: "2023",
-    blurb: "Short course, but it's where decision trees and model validation finally clicked. Placeholder text — write a line about the hardest part of this one.",
-    accent: "#6B5B3E",
-    pdf: "certs/intro-to-ml.pdf"
-  },
-  {
-    title: "Git & GitHub Essentials",
-    issuer: "self-study",
-    date: "2022",
-    blurb: "Not an official certificate, but worth a frame: the point where branches, merges, and rebases stopped being scary. Use this slot for anything you're proud of, certified or not.",
-    accent: "#5A4A6B",
-    pdf: "certs/git-github-essentials.pdf"
-  },
-  {
-    title: "Add Your Next One Here",
-    issuer: "—",
-    date: "—",
-    blurb: "This frame is empty on purpose. Duplicate one of the objects above in the DATA array, fill in your details, and a new frame will appear on the wall automatically.",
-    accent: "#888"
-    // No pdf field = download button won't appear
+    title: "Add Your Next Certificate",
+    issuer: "Issuer Name",
+    date: "2024",
+    blurb: "Upload the PDF to your certs/ folder, update the title, issuer, date, and blurb, then add: pdf: \"certs/yourfile.pdf\"",
+    accent: "#6B5B3E"
   }
 ];
 
-/* Generates a simple placeholder "certificate" SVG so the page
-   works out of the box. Delete this function and use real image
-   paths/URLs in DATA above once you have your own scans. */
+/* ================================================================
+   NO NEED TO EDIT BELOW THIS LINE
+   ================================================================ */
+
 function placeholderSVG(title, issuer, accent){
   const safe = (s) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
-  return `data:image/svg+xml;utf8,` + encodeURIComponent(`
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(`
     <svg xmlns="http://www.w3.org/2000/svg" width="600" height="450">
       <rect width="600" height="450" fill="#F2EAD8"/>
       <rect x="18" y="18" width="564" height="414" fill="none" stroke="${accent}" stroke-width="3"/>
       <rect x="30" y="30" width="540" height="390" fill="none" stroke="${accent}" stroke-width="1"/>
       <circle cx="300" cy="150" r="34" fill="none" stroke="${accent}" stroke-width="2"/>
-      <text x="300" y="158" font-family="Georgia, serif" font-size="26" fill="${accent}" text-anchor="middle">★</text>
-      <text x="300" y="230" font-family="Georgia, serif" font-size="22" fill="#2A2A28" text-anchor="middle">${safe(title)}</text>
-      <text x="300" y="262" font-family="Georgia, serif" font-size="13" fill="#5C5650" text-anchor="middle" letter-spacing="1">${safe(issuer.toUpperCase())}</text>
-      <line x1="220" y1="300" x2="380" y2="300" stroke="${accent}" stroke-width="1"/>
-      <text x="300" y="320" font-family="Georgia, serif" font-size="11" fill="#5C5650" text-anchor="middle">CERTIFICATE OF COMPLETION</text>
+      <text x="300" y="158" font-family="Georgia,serif" font-size="26" fill="${accent}" text-anchor="middle">★</text>
+      <text x="300" y="230" font-family="Georgia,serif" font-size="20" fill="#2A2A28" text-anchor="middle">${safe(title)}</text>
+      <text x="300" y="262" font-family="Georgia,serif" font-size="12" fill="#5C5650" text-anchor="middle" letter-spacing="1">${safe(issuer.toUpperCase())}</text>
+      <line x1="220" y1="296" x2="380" y2="296" stroke="${accent}" stroke-width="1"/>
+      <text x="300" y="316" font-family="Georgia,serif" font-size="10" fill="#5C5650" text-anchor="middle">PDF NOT YET UPLOADED</text>
     </svg>
   `);
 }
 
-const gallery = document.getElementById('gallery');
-const backdrop = document.getElementById('backdrop');
-const modalCanvas = document.getElementById('modalCanvas');
-const modalImg = document.getElementById('modalImg');
-const modalTitle = document.getElementById('modal-title');
-const modalMeta = document.getElementById('modalMeta');
-const modalBlurb = document.getElementById('modalBlurb');
-const modalDlBtn = document.getElementById('modalDlBtn');
-const closeBtn = document.getElementById('closeBtn');
-
-const dlIcon = `<svg width="11" height="11" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>`;
-
-// Render the first page of a PDF into a given <canvas> element
-async function renderPdfToCanvas(pdfUrl, canvas, scale = 1.5) {
+async function renderPdfToCanvas(pdfUrl, canvas, scale) {
   try {
     const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
     const page = await pdf.getPage(1);
@@ -497,26 +450,36 @@ async function renderPdfToCanvas(pdfUrl, canvas, scale = 1.5) {
   }
 }
 
-let lastFocused = null;
+const dlIcon = `<svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+const gallery    = document.getElementById('gallery');
+const backdrop   = document.getElementById('backdrop');
+const modalCanvas= document.getElementById('modalCanvas');
+const modalImg   = document.getElementById('modalImg');
+const modalTitle = document.getElementById('modal-title');
+const modalMeta  = document.getElementById('modalMeta');
+const modalBlurb = document.getElementById('modalBlurb');
+const modalDlBtn = document.getElementById('modalDlBtn');
+const closeBtn   = document.getElementById('closeBtn');
+let lastFocused  = null;
 
 DATA.forEach((cert) => {
-  const hasPdf = !!cert.pdf;
-  const hasImage = !!cert.image;
+  const hasPdf  = !!cert.pdf;
+  const hasImage= !!cert.image;
+  const accent  = cert.accent || '#B08D57';
 
-  // Build frame
   const frame = document.createElement('div');
   frame.className = 'frame';
   frame.tabIndex = 0;
   frame.setAttribute('role', 'button');
-  frame.setAttribute('aria-label', `View certificate: ${cert.title}, ${cert.issuer}`);
+  frame.setAttribute('aria-label', `View certificate: ${cert.title}`);
 
-  // Thumbnail: use canvas for PDF, img for image, svg placeholder otherwise
   let thumbHTML;
   if (hasPdf && !hasImage) {
-    thumbHTML = `<div class="pdf-loading" id="loading-${cert.title.replace(/\s/g,'_')}">Loading…</div><canvas class="pdf-thumb" style="display:none;width:100%;border-radius:1px;"></canvas>`;
+    thumbHTML = `<div class="pdf-loading">Loading…</div><canvas class="pdf-thumb" style="display:none;width:100%;border-radius:1px;"></canvas>`;
   } else {
-    const imgSrc = cert.image || placeholderSVG(cert.title, cert.issuer, cert.accent || "#B08D57");
-    thumbHTML = `<img src="${imgSrc}" alt="${cert.title} certificate thumbnail" loading="lazy">`;
+    const src = cert.image || placeholderSVG(cert.title, cert.issuer, accent);
+    thumbHTML = `<img src="${src}" alt="${cert.title} thumbnail" loading="lazy">`;
   }
 
   frame.innerHTML = `
@@ -526,46 +489,42 @@ DATA.forEach((cert) => {
       <div class="meta">${cert.issuer} · ${cert.date}</div>
     </div>
     ${hasPdf
-      ? `<a class="dl-btn" href="${cert.pdf}" download title="Download PDF">${dlIcon} Download PDF</a>`
-      : `<span class="dl-btn disabled">${dlIcon} No PDF yet</span>`
-    }
+      ? `<a class="dl-btn" href="${cert.pdf}" download>${dlIcon} Download PDF</a>`
+      : `<span class="dl-btn disabled">${dlIcon} No PDF yet</span>`}
   `;
 
-  // Render PDF thumbnail after frame is appended
   if (hasPdf && !hasImage) {
     const thumbCanvas = frame.querySelector('.pdf-thumb');
     const loader = frame.querySelector('.pdf-loading');
     renderPdfToCanvas(cert.pdf, thumbCanvas, 1.2).then(() => {
-      if(loader) loader.remove();
+      if (loader) loader.remove();
       thumbCanvas.style.display = 'block';
     });
   }
 
-  // Stop download button click from opening modal
-  const dlEl = frame.querySelector('.dl-btn');
-  if (dlEl && hasPdf) dlEl.addEventListener('click', (e) => e.stopPropagation());
+  const dlEl = frame.querySelector('a.dl-btn');
+  if (dlEl) dlEl.addEventListener('click', (e) => e.stopPropagation());
 
   function openModal() {
     lastFocused = document.activeElement;
     modalTitle.textContent = cert.title;
-    modalMeta.textContent = `${cert.issuer} · ${cert.date}`;
+    modalMeta.textContent  = `${cert.issuer} · ${cert.date}`;
     modalBlurb.textContent = cert.blurb;
 
     if (hasPdf && !hasImage) {
-      // Render PDF into modal canvas at higher resolution
-      modalImg.style.display = 'none';
+      modalImg.style.display    = 'none';
       modalCanvas.style.display = 'block';
       renderPdfToCanvas(cert.pdf, modalCanvas, 2.5);
     } else {
-      const imgSrc = cert.image || placeholderSVG(cert.title, cert.issuer, cert.accent || "#B08D57");
+      const src = cert.image || placeholderSVG(cert.title, cert.issuer, accent);
       modalCanvas.style.display = 'none';
-      modalImg.style.display = 'block';
-      modalImg.src = imgSrc;
-      modalImg.alt = `${cert.title} certificate`;
+      modalImg.style.display    = 'block';
+      modalImg.src = src;
+      modalImg.alt = cert.title;
     }
 
     if (hasPdf) {
-      modalDlBtn.href = cert.pdf;
+      modalDlBtn.href     = cert.pdf;
       modalDlBtn.download = cert.pdf.split('/').pop();
       modalDlBtn.classList.remove('hidden');
     } else {
@@ -584,19 +543,15 @@ DATA.forEach((cert) => {
   gallery.appendChild(frame);
 });
 
-function closeModal(){
+function closeModal() {
   backdrop.classList.remove('open');
-  if(lastFocused) lastFocused.focus();
+  if (lastFocused) lastFocused.focus();
 }
-
 closeBtn.addEventListener('click', closeModal);
-backdrop.addEventListener('click', (e) => {
-  if(e.target === backdrop) closeModal();
-});
+backdrop.addEventListener('click', (e) => { if (e.target === backdrop) closeModal(); });
 document.addEventListener('keydown', (e) => {
-  if(e.key === 'Escape' && backdrop.classList.contains('open')) closeModal();
+  if (e.key === 'Escape' && backdrop.classList.contains('open')) closeModal();
 });
 </script>
-
 </body>
 </html>
